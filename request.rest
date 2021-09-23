@@ -1,0 +1,30 @@
+GET http://localhost:3000/posts 
+Authorization: Bearer eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibGFsYSIsImlhdCI6MTYzMjM4MDQ5OCwiZXhwIjoxNjMyMzgwNzk4fQ.NXF9MVulqnVWMEP3jaTOUxdpNjCkexl9s0XFF0ioNX6NLwFBCQSgzi9AX9PCMV14ZwCgfEGeJGO8UgPPV4SRXzLcTFI0h8x6s46Bc9ietePgRa28qYNy57eOSZT8WFrZQ1JG6529fl7ln-iSGfGLH8et9qmpL8x6910qQob7mzYSXXNvWkZ12ZNpWJ5xmOXbT5eVFO1pjBWhpQQ76kaf4ZA_IK3ep3sC2C49xx0fEGdphYu2lYDsqD0_nxFCV1hEIv5NqgC8r0Pj7S3wDkAWTuqNsBIz5QjgVeakjyTO12TY87Hi1ZIRcR3otPfu4Px_KwlkbUivBz91Ejrad3yokw
+###
+
+DELETE http://localhost:4000/logout 
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibGFsYSIsImlhdCI6MTYzMjM4MDQ5OCwiZXhwIjoxNjMyMzgwNzk4fQ.RrjuM6a5OUDw2EQPyb5n2Fm2LEjXK1JJ9m3AHbFuPlEZvCiUIK5e1XHKVDI1FiiYoBpJzPd_YdXHYKD0BD23cVh-cHvUUUu3DZFUQKCanVVhmE0D_pnU5-ViV0bOEf59TCtwh77t6i3ybhuW7gMYS1LoN2slXvef1jfUIIgmlLQ6HgIZEw0YQHEhHaBx6vNrf3FE_Bg8-Y38mdrmQNeZy4GGbZiMJ75z0q9H77wBbvsGYepPrCFOLwoKfHq9Tt--maEmD28S_XdMpod1MBs2wHjz_a1Ip-NnuKgLtayHjUovQmi9akJbKDiUHUYxRyl5dyYLvLJFkhu84G62taWLWQ"
+}
+###
+POST http://localhost:4000/token 
+#ada masalah dalam generate access token baru menggunakan refresh token.
+#TypeError: Cannot read property 'name' of undefined
+#saya sendiri juga bingung gimana konsep pengambilan namenya dari server lain.
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibGFsYSIsImlhdCI6MTYzMjM4MDQ5OCwiZXhwIjoxNjMyMzgwNzk4fQ.RrjuM6a5OUDw2EQPyb5n2Fm2LEjXK1JJ9m3AHbFuPlEZvCiUIK5e1XHKVDI1FiiYoBpJzPd_YdXHYKD0BD23cVh-cHvUUUu3DZFUQKCanVVhmE0D_pnU5-ViV0bOEf59TCtwh77t6i3ybhuW7gMYS1LoN2slXvef1jfUIIgmlLQ6HgIZEw0YQHEhHaBx6vNrf3FE_Bg8-Y38mdrmQNeZy4GGbZiMJ75z0q9H77wBbvsGYepPrCFOLwoKfHq9Tt--maEmD28S_XdMpod1MBs2wHjz_a1Ip-NnuKgLtayHjUovQmi9akJbKDiUHUYxRyl5dyYLvLJFkhu84G62taWLWQ"
+}
+
+###
+POST  http://localhost:4000/login 
+Content-Type: application/json
+
+{
+    "username": "lala"
+}
+ 
+#jika terjadi masalah mungkin di server.js nya belum manggil dotenv
