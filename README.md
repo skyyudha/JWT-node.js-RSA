@@ -26,7 +26,7 @@ login -> copy access token ke Auth /posts -> copy refresh token ke "token" /logo
 4. refreshJwtRS512.key.pub
 
 ### NOTE:
-## Semua petunjuk tambahan ada di file: guide newbie nodeJS.txt
-## file yang memiliki nama file part adalah bentuk dokumentasi langkah-langkah menuju final //lupa bikin branchnya hehehe
+##### Semua petunjuk tambahan ada di file: guide newbie nodeJS.txt
+#### file yang memiliki nama file part adalah bentuk dokumentasi langkah-langkah menuju final //lupa bikin branchnya hehehe
   
 # JWT-node.js-RSA
