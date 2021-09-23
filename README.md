@@ -1,9 +1,11 @@
 # JWT-node.js-RSA
 # JWT-node.js-RSA
-# JWT-node.js-RSA
+
+###Desc
+Hanya digunakan untuk simulasi pertukaran token (JWT) pada rest API
 
 ### Requirement:
-1. rest client extention vscode
+1. Rest client Extensions vscode
 2. npm
 3. nodemon
 4. jsonwebtoken || npm install jsonwebtoken || https://github.com/auth0/node-jsonwebtoken
@@ -13,7 +15,8 @@
 2. server.js (client)
 
 ### Alur
-gunakan request.rest untuk testing
+Gunakan request.rest untuk testing
+
 login -> copy access token ke Auth /posts -> copy refresh token ke "token" /logout dan ke "token" /token -> request get /posts -> jika username sama = sukses
 
 ### pair key yang digunakan:
@@ -23,3 +26,5 @@ login -> copy access token ke Auth /posts -> copy refresh token ke "token" /logo
 4. refreshJwtRS512.key.pub
 
 ### semua petunjuk tambahan ada di file: guide newbie nodeJS.txt
+
+# JWT-node.js-RSA
