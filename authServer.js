@@ -48,7 +48,7 @@ app.post('/login',(req,res) => { //diganti jadi post karena mau ngirim token
     const user = {name: username}
     
     const accessToken =  generateAccessToken(user)
-    const refreshToken =  jwt.sign(user,refreshPrivateKey,{ algorithm: 'RS512', expiresIn: '5m'})
+    const refreshToken =  jwt.sign(user,refreshPrivateKey,{ algorithm: 'PS256', expiresIn: '5m'})
     refreshTokens.push(refreshToken) //send refreshToken to refreshTokens Array
     res.json({ accessToken: accessToken, refreshToken: refreshToken}) //return value
 })
@@ -56,7 +56,7 @@ app.post('/login',(req,res) => { //diganti jadi post karena mau ngirim token
 function generateAccessToken(user){
     
     // jwt.sign( user, process.env.ACCESS_TOKEN_SECRET) //ambil payload dari jwt header
-    return jwt.sign(user, accessPrivateKey, { algorithm: 'RS512', expiresIn: '5m' }) //ambil payload dari jwt header
+    return jwt.sign(user, accessPrivateKey, { algorithm: 'PS256', expiresIn: '5m' }) //ambil payload dari jwt header
     
 }
 
