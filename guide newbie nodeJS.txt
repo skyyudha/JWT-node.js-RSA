@@ -26,6 +26,5 @@ openssl rsa -in private.pem -pubout -out public.pem
 
 ###
 problem dari tutorial:
-1. token is null
-2. gk tau cara pake fitur Authorization di resquest.rest
-3. mungkin penamaan Bearer TOKEN berpengaruh
+1. masih kurang yakin sama JWS vs JWE
+2. apakah refresh token yang digunakan selalu sama dalam satu sesi ?
