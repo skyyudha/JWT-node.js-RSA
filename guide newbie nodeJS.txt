@@ -9,22 +9,12 @@ node
 > require('crypto').randomBytes(64).toString('hex') //disini dia ambil random Bytes
 output : '2da1014b6d775315f1d4f6236da93aef55f135ca652b44e17e5f20ee3afa3b316eceba823060a6830dcf8798606e28458766e9a97b8b815bbb4dba6c932f3b3f'
 
-###generate RSA key
-ssh-keygen -t rsa -b 2048 -m PEM -f jwtRS256.key
-openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
-
-ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key
-openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
-
-#only using ssh-keygen
-ssh-keygen -t rsa -P "" -b 2048 -m PEM -f refreshJwtRS256.key
-ssh-keygen -e -m PEM -f jwtRS256.key > refreshJwtRS256.key.pub
-
-#only using openssl
-openssl genrsa -out private.pem 2048
-openssl rsa -in private.pem -pubout -out public.pem
+###generate ECDSA key
+openssl ecparam -name prime256v1 -genkey -noout -out ec256.key
+openssl ec -in ec256.key -pubout -out ec256.pem
 
 ###
 problem dari tutorial:
-1. masih kurang yakin sama JWS vs JWE
-2. apakah refresh token yang digunakan selalu sama dalam satu sesi ?
+1. token is null
+2. gk tau cara pake fitur Authorization di resquest.rest
+3. mungkin penamaan Bearer TOKEN berpengaruh
