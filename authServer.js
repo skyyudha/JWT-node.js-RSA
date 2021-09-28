@@ -25,7 +25,7 @@ app.post('/token', (req,res) => {
     if (refreshToken == null) return res.sendStatus(401)
     //console.log(refreshTokens)
     // if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
-    jwt.verify(refreshToken, refreshPublicKey,(err,user) =>{ //verifikasi apakah refresh token valid
+    jwt.verify(refreshToken, accessPublicKey,(err,user) =>{ //verifikasi apakah refresh token valid
         //jika refresh token valid maka akan langsung generate access token baru.
         //kenapa access token yang lama tidak divalidasi ?
         // if(err) return res.sendStatus(403) //###masih kena error. tapi yang ini gk tau alasannya
@@ -48,7 +48,7 @@ app.post('/login',(req,res) => { //diganti jadi post karena mau ngirim token
     const user = {name: username}
     
     const accessToken =  generateAccessToken(user)
-    const refreshToken =  jwt.sign(user,refreshPrivateKey,{ algorithm: 'PS256', expiresIn: '5m'})
+    const refreshToken =  jwt.sign(user,accessPrivateKey,{ algorithm: 'PS256', expiresIn: '5m'})
     refreshTokens.push(refreshToken) //send refreshToken to refreshTokens Array
     res.json({ accessToken: accessToken, refreshToken: refreshToken}) //return value
 })
