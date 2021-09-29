@@ -5,7 +5,7 @@ const express = require('express')
 const app = express()
 
 const fs = require('fs')
-var publicKey = fs.readFileSync('./jwtRS512.key.pub');
+var publicKey = fs.readFileSync('./jwtRS256.key.pub');
 
 const jwt = require("jsonwebtoken") //get library JWT
 

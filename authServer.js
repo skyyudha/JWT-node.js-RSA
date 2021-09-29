@@ -5,11 +5,11 @@ const express = require('express')
 const app = express()
 
 const fs = require('fs')
-var accessPrivateKey = fs.readFileSync('./jwtRS512.key');
-var accessPublicKey = fs.readFileSync('./jwtRS512.key.pub');
+var accessPrivateKey = fs.readFileSync('./jwtRS256.key');
+var accessPublicKey = fs.readFileSync('./jwtRS256.key.pub');
 
-var refreshPrivateKey = fs.readFileSync('./refreshJwtRS512.key');
-var refreshPublicKey = fs.readFileSync('./refreshJwtRS512.key.pub');
+var refreshPrivateKey = fs.readFileSync('./refreshJwtRS256.key');
+var refreshPublicKey = fs.readFileSync('./refreshJwtRS256.key.pub');
 
 const jwt = require("jsonwebtoken") //get library JWT
 
@@ -48,15 +48,15 @@ app.post('/login',(req,res) => { //diganti jadi post karena mau ngirim token
     const user = {name: username}
     
     const accessToken =  generateAccessToken(user)
-    const refreshToken =  jwt.sign(user,refreshPrivateKey,{ algorithm: 'RS512', expiresIn: '5m'})
-    refreshTokens.push(refreshToken) //send refreshToken to refreshTokens Array
+    const refreshToken =  jwt.sign(user,refreshPrivateKey,{ algorithm: 'RS256', expiresIn: '5m'})
+    //refreshTokens.push(refreshToken) //send refreshToken to refreshTokens Array
     res.json({ accessToken: accessToken, refreshToken: refreshToken}) //return value
 })
 
 function generateAccessToken(user){
     
     // jwt.sign( user, process.env.ACCESS_TOKEN_SECRET) //ambil payload dari jwt header
-    return jwt.sign(user, accessPrivateKey, { algorithm: 'RS512', expiresIn: '5m' }) //ambil payload dari jwt header
+    return jwt.sign(user, accessPrivateKey, { algorithm: 'RS256', expiresIn: '5m' }) //ambil payload dari jwt header
     
 }
 
