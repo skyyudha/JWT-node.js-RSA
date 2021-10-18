@@ -7,8 +7,8 @@ const app = express()
 const fs = require('fs')
 var publicKey = fs.readFileSync('./jwtRS256.key.pub');
 
-const jwt = require("jsonwebtoken") //get library JWT
-
+// const jwt = require("jsonwebtoken") //get library JWT
+const { jwtVerify } = require('jose')
 app.use(express.json()) //pasang JWT ke Apps
 
 const posts = [
@@ -34,11 +34,18 @@ function authenticateToken(req,res,next){
     if (token == null) return res.sendStatus(401) //jika user tidak memiliki token maka akan return user dan status 401 untuk tidak memilki akses
 
     //verifikasi token
-    jwt.verify(token, publicKey, (err,user) => {
-        if(err) return res.sendStatus(403) //invalid token
-        req.user = user
-        next()
-    })
+    // jwt.verify(token, publicKey, (err,user) => {
+    //     if(err) return res.sendStatus(403) //invalid token
+    //     req.user = user
+    //     next()
+    // })
+    const { payload, protectedHeader } = await jwtVerify(token, publicKey, {
+        issuer: 'urn:example:issuer',
+        audience: 'urn:example:audience'
+      })
+      
+      console.log(protectedHeader)
+      console.log(payload)
 }
 
 app.listen(3000)
