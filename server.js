@@ -5,12 +5,18 @@ const express = require('express')
 const app = express()
 
 const fs = require('fs')
-var publicKey = fs.readFileSync('./jwtRS256.key.pub');
+// var publicKey = fs.readFileSync('./jwtRS256.key.pub');
 
 // const jwt = require("jsonwebtoken") //get library JWT
 const { jwtVerify } = require('jose')
 app.use(express.json()) //pasang JWT ke Apps
-
+const algorithm = 'RS256'
+const pkcs8 = fs.readFileSync('./jwtRS256.key');
+// const rsaPrivateKey = await importPKCS8(pkcs8, algorithm)
+const rsaPrivateKey = async function() {
+    await importPKCS8(pkcs8, algorithm)
+    //console.log(testkey)
+  }
 const posts = [
     {
         username: 'lala',
@@ -26,7 +32,7 @@ app.get('/posts', authenticateToken, (req,res) => {
     res.json(posts.filter(post => post.username === req.user.name))
 })
 
-function authenticateToken(req,res,next){
+async function authenticateToken(req,res,next){
    //token header
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
@@ -39,7 +45,7 @@ function authenticateToken(req,res,next){
     //     req.user = user
     //     next()
     // })
-    const { payload, protectedHeader } = await jwtVerify(token, publicKey, {
+    const { payload, protectedHeader } = await jwtVerify(token, rsaPrivateKey, {
         issuer: 'urn:example:issuer',
         audience: 'urn:example:audience'
       })

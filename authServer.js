@@ -5,8 +5,8 @@ const express = require('express')
 const app = express()
 
 const fs = require('fs')
-var accessPrivateKey = fs.readFileSync('./jwtRS256.key');
-var accessPublicKey = fs.readFileSync('./jwtRS256.key.pub');
+// var accessPrivateKey = fs.readFileSync('./jwtRS256.key');
+// var accessPublicKey = fs.readFileSync('./jwtRS256.key.pub');
 
 var refreshPrivateKey = fs.readFileSync('./refreshJwtRS256.key');
 var refreshPublicKey = fs.readFileSync('./refreshJwtRS256.key.pub');
@@ -31,30 +31,42 @@ const { SignJWT,importSPKI,exportJWK,importPKCS8 } = require('jose')
 //     console.log('after start');
 //   })();
 
-//   const algorithm = 'ES256'
-//   const spki = `-----BEGIN PUBLIC KEY-----
-//   MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEFlHHWfLk0gLBbsLTcuCrbCqoHqmM
-//   YJepMC+Q+Dd6RBmBiA41evUsNMwLeN+PNFqib+xwi9JkJ8qhZkq8Y/IzGg==
-//   -----END PUBLIC KEY-----`
-//   const ecPublicKey = await importSPKI(spki, algorithm)
-
   const algorithm = 'ES256'
-const pkcs8 = `-----BEGIN PRIVATE KEY-----
-MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgiyvo0X+VQ0yIrOaN
-nlrnUclopnvuuMfoc8HHly3505OhRANCAAQWUcdZ8uTSAsFuwtNy4KtsKqgeqYxg
-l6kwL5D4N3pEGYGIDjV69Sw0zAt43480WqJv7HCL0mQnyqFmSrxj8jMa
------END PRIVATE KEY-----`
-// const ecPrivateKey = await importPKCS8(pkcs8, algorithm)
-const ecPublicKey = async function() {
-    const testkey = await importPKCS8(pkcs8, algorithm)
-    console.log(testkey)
-  }
+  // const pkcs8 = fs.readFileSync('./jwtRS256.key.pub');
+  // const pkcs8 = `-----BEGIN RSA PUBLIC KEY-----
+  // MIIBCgKCAQEA24HWTGus/j/xaCnMBkABdozWw3Kph/g7yg2QcSHuHXQXUaDmNhYG
+  // hFgF1EOT6WOZrCqwTxUGbTRPibJ68VRWxGPnPxuWtfRqopzrAaPf41RqwzqIMN8Z
+  // lI6BY/ipxNESJRcM5PB2VF7PW0jHHd557+h10AUhiYj0UTjb+Mf37N7hxO0lD37n
+  // J588bVQk92ziDhf7AHBMc2n7O29E0YxoG9b3AUO/y9C7gagLCrIv0FPNf88Gcd4v
+  // BVEd8sryh/a+OwkaXlXQbEP/aL95EDbGG1ucDDK8ZDV3guEgbAd7RF6Tq9V3nDZ2
+  // e8mGBnp5ak8BejTr1VRkYqZA6gLO2vxhMQIDAQAB
+  // -----END RSA PUBLIC KEY-----`
+  const pkcs8 = `-----BEGIN PRIVATE KEY-----
+  MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgiyvo0X+VQ0yIrOaN
+  nlrnUclopnvuuMfoc8HHly3505OhRANCAAQWUcdZ8uTSAsFuwtNy4KtsKqgeqYxg
+  l6kwL5D4N3pEGYGIDjV69Sw0zAt43480WqJv7HCL0mQnyqFmSrxj8jMa
+  -----END PRIVATE KEY-----`
+  // const ecPublicKey = await importSPKI(spki, algorithm)
 
-const privateJwk = await exportJWK(privateKey)
-const publicJwk = await exportJWK(publicKey)
+//   const algorithm = 'ES256'
+// const pkcs8 = `-----BEGIN PRIVATE KEY-----
+// MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgiyvo0X+VQ0yIrOaN
+// nlrnUclopnvuuMfoc8HHly3505OhRANCAAQWUcdZ8uTSAsFuwtNy4KtsKqgeqYxg
+// l6kwL5D4N3pEGYGIDjV69Sw0zAt43480WqJv7HCL0mQnyqFmSrxj8jMa
+// -----END PRIVATE KEY-----`
+// const ecPrivateKey = await importPKCS8(pkcs8, algorithm)
+// const rsaPublicKey = async function() {
+//     return await importPKCS8(pkcs8, algorithm)
+    
+//     //console.log(testkey)
+//   }
+//   console.log("hai")
+//   console.log(typeof rsaPublicKey); //function
+// const privateJwk = await exportJWK(privateKey)
+// const publicJwk = await exportJWK(publicKey)
   
-console.log(privateJwk)
-console.log(publicJwk)
+// console.log(privateJwk)
+// console.log(publicJwk)
 
 let refreshTokens = [] //not recomended in real production only for demonstrate
 //it will make refreshTokens empting out
@@ -96,16 +108,19 @@ app.post('/login',(req,res) => { //diganti jadi post karena mau ngirim token
 
 async function generateAccessToken(user){
     //const jwt = await new SignJWT({ 'urn:example:claim': true })
+    const rsaPublicKey = await importPKCS8(pkcs8, algorithm)
+    
     const jwt = await new SignJWT({ 'urn:example:claim': true })
-  .setProtectedHeader({ alg: 'RS256' })
+  .setProtectedHeader({ alg: 'ES256' })
   .setIssuedAt()
   .setIssuer('urn:example:issuer')
   .setAudience('urn:example:audience')
   .setExpirationTime('2h')
-  .sign(ecPublicKey)
+  .sign(rsaPublicKey)
 
   console.log("kamu")
   console.log(jwt)
+  console.log(typeof jwt)
   console.log("kamu")
     // jwt.sign( user, process.env.ACCESS_TOKEN_SECRET) //ambil payload dari jwt header
     return jwt
