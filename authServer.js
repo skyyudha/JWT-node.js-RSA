@@ -16,7 +16,7 @@ var refreshPublicKey = fs.readFileSync('./refreshJwtRS256.key.pub');
 
 app.use(express.json()) //pasang JWT ke Apps
 //const { importPKCS8 } = require('jose')
-const { SignJWT,importSPKI,exportJWK,importPKCS8 } = require('jose')
+const { SignJWT,importSPKI,exportJWK,importPKCS8, importJWK } = require('jose')
 
 //const { importJWK } = require('jose')
 // (async() => {
@@ -92,40 +92,48 @@ app.delete('/logout',(req,res)=>{
     res.sendStatus(204)
 })
 
-app.post('/login',(req,res) => { //diganti jadi post karena mau ngirim token
-//bagian untuk Autthenticate user 
-    //tapi diskip dulu karena mau fokus ke Authorization
-
+app.post('/login',async (req,res) => { //diganti jadi post karena mau ngirim token
 //bagian authorization
     const username = req.body.username //gk tau jelasinnya gimana
     const user = {name: username}
     
-    const accessToken =  generateAccessToken(user)
+    var accessToken =  generateAccessToken(user) //panggil sync fungsi
+
+    let hasil = await accessToken.then(function(result) {
+      console.log("batas A")      
+      console.log(result) // "Some User token"
+      console.log("typeof = " + typeof result)
+      console.log("batas A")
+      // accessToken = result; // fail
+      return result; // fail
+   })
+    console.log("batas B")
+    console.log(hasil)
+    console.log("typeof = " + typeof hasil)
+    console.log("batas B")
+
     //const refreshToken =  jwt.sign(user,refreshPrivateKey,{ algorithm: 'RS256', expiresIn: '5m'})
     //refreshTokens.push(refreshToken) //send refreshToken to refreshTokens Array
-    res.json({ accessToken: accessToken}) //return value
+    res.json({ accessToken: hasil}) //return value
 })
 
 async function generateAccessToken(user){
-    //const jwt = await new SignJWT({ 'urn:example:claim': true })
-    const rsaPublicKey = await importPKCS8(pkcs8, algorithm)
-    
-    const jwt = await new SignJWT({ 'urn:example:claim': true })
-  .setProtectedHeader({ alg: 'ES256' })
+    const secret = `MIIBPAIBAAJBALJaeVlgMfxZUWglk0PZZBkbmnkZkFAbqtaTJqeCIXa8xscPVvxJ
+    h2JjhwC4OwsVBgHvrhIwVLodgrQbYRpuVF0CAwEAAQJABIwoAe5g9+UzHSuwGI/H
+    bJh2lNXhBxndfkEcQDMiNUvJ22rVf+v+YsrxMLWkwoss3jERZ7JKNFepbNuir9SG
+    IQIhAP1406f4FoWMDwfjMjf1rkCEfyOzAZ320us8mZBPMFPFAiEAtCHaG14NlC1z
+    mV29jWVh9YoDECcoS2zAvunJRv6IT7kCIQD7Cgw2s9M6eTj5yt8V5VGrvI5fQQ88
+    8BR9vwsojgWDMQIhAKdAo1Yz3yHNjf9CBcVq9CjbS3rNEOHviYv6YNQVdBWpAiEA
+    mlJ9E20+boNRHie/PGmjZyOM9mkjOyLLMqIbGhRe4vM=`
+    var uint8array = new TextEncoder("utf-8").encode(secret); //convert secret to uint8array    
+    const jwt = await new SignJWT({ 'urn:example:claim': true }) // generate token JWT // SignJWT dari library
+  .setProtectedHeader({ alg: 'HS256' })
   .setIssuedAt()
   .setIssuer('urn:example:issuer')
   .setAudience('urn:example:audience')
   .setExpirationTime('2h')
-  .sign(rsaPublicKey)
-
-  console.log("kamu")
-  console.log(jwt)
-  console.log(typeof jwt)
-  console.log("kamu")
-    // jwt.sign( user, process.env.ACCESS_TOKEN_SECRET) //ambil payload dari jwt header
-    return jwt
-    //return jwt.sign(user, accessPrivateKey, { algorithm: 'RS256', expiresIn: '5m' }) //ambil payload dari jwt header
-    
+  .sign(uint8array)
+    return jwt //return sukses //output object     
 }
 
 // Call start
