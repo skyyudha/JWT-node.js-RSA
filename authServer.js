@@ -16,7 +16,7 @@ var refreshPublicKey = fs.readFileSync('./refreshJwtRS256.key.pub');
 
 app.use(express.json()) //pasang JWT ke Apps
 //const { importPKCS8 } = require('jose')
-const { SignJWT,importSPKI,exportJWK,importPKCS8, importJWK } = require('jose')
+const {generateKeyPair, SignJWT,importSPKI,exportJWK,importPKCS8, importJWK, generateSecret  } = require('jose')
 
 //const { importJWK } = require('jose')
 // (async() => {
@@ -31,7 +31,7 @@ const { SignJWT,importSPKI,exportJWK,importPKCS8, importJWK } = require('jose')
 //     console.log('after start');
 //   })();
 
-  const algorithm = 'ES256'
+  // const algorithm = 'ES256'
   // const pkcs8 = fs.readFileSync('./jwtRS256.key.pub');
   // const pkcs8 = `-----BEGIN RSA PUBLIC KEY-----
   // MIIBCgKCAQEA24HWTGus/j/xaCnMBkABdozWw3Kph/g7yg2QcSHuHXQXUaDmNhYG
@@ -41,11 +41,11 @@ const { SignJWT,importSPKI,exportJWK,importPKCS8, importJWK } = require('jose')
   // BVEd8sryh/a+OwkaXlXQbEP/aL95EDbGG1ucDDK8ZDV3guEgbAd7RF6Tq9V3nDZ2
   // e8mGBnp5ak8BejTr1VRkYqZA6gLO2vxhMQIDAQAB
   // -----END RSA PUBLIC KEY-----`
-  const pkcs8 = `-----BEGIN PRIVATE KEY-----
-  MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgiyvo0X+VQ0yIrOaN
-  nlrnUclopnvuuMfoc8HHly3505OhRANCAAQWUcdZ8uTSAsFuwtNy4KtsKqgeqYxg
-  l6kwL5D4N3pEGYGIDjV69Sw0zAt43480WqJv7HCL0mQnyqFmSrxj8jMa
-  -----END PRIVATE KEY-----`
+  // const pkcs8 = `-----BEGIN PRIVATE KEY-----
+  // MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgiyvo0X+VQ0yIrOaN
+  // nlrnUclopnvuuMfoc8HHly3505OhRANCAAQWUcdZ8uTSAsFuwtNy4KtsKqgeqYxg
+  // l6kwL5D4N3pEGYGIDjV69Sw0zAt43480WqJv7HCL0mQnyqFmSrxj8jMa
+  // -----END PRIVATE KEY-----`
   // const ecPublicKey = await importSPKI(spki, algorithm)
 
 //   const algorithm = 'ES256'
@@ -68,7 +68,7 @@ const { SignJWT,importSPKI,exportJWK,importPKCS8, importJWK } = require('jose')
 // console.log(privateJwk)
 // console.log(publicJwk)
 
-let refreshTokens = [] //not recomended in real production only for demonstrate
+// let refreshTokens = [] //not recomended in real production only for demonstrate
 //it will make refreshTokens empting out
 
 //###masih ada masalah dalam verify refresh token.
@@ -92,48 +92,76 @@ app.delete('/logout',(req,res)=>{
     res.sendStatus(204)
 })
 
+
+// fs.writeFileSync("secret.key.pub", privateJwk);
+
+// const secret = async function() { await generateSecret('HS256') }
+// const privateJwk = async function() {  await exportJWK(secret) }
+//       console.log("batas A") 
+// console.log(secret)
+// console.log("typeof = " + typeof secret)    
+// console.log(privateJwk)
+// console.log("typeof = " + typeof privateJwk)
+//       console.log("batas A") 
+
 app.post('/login',async (req,res) => { //diganti jadi post karena mau ngirim token
 //bagian authorization
     const username = req.body.username //gk tau jelasinnya gimana
     const user = {name: username}
     
-    var accessToken =  generateAccessToken(user) //panggil sync fungsi
-
-    let hasil = await accessToken.then(function(result) {
-      console.log("batas A")      
-      console.log(result) // "Some User token"
-      console.log("typeof = " + typeof result)
-      console.log("batas A")
-      // accessToken = result; // fail
-      return result; // fail
-   })
+    // let { accessToken, publicJwk }  =  generateAccessToken(user) //panggil sync fungsi
+    let { accessToken, publicJwk }  = await  generateAccessToken(user) //panggil sync fungsi
     console.log("batas B")
-    console.log(hasil)
-    console.log("typeof = " + typeof hasil)
+    console.log(accessToken)
+    console.log(publicJwk)
     console.log("batas B")
-
+  //   let hasil = await accessToken.then(function(result) {
+  //     // console.log("batas A")      
+  //     // console.log(result) // "Some User token"
+  //     // console.log("typeof = " + typeof result)
+  //     // console.log("batas A")
+  //     // accessToken = result; // fail
+  //     return result; // fail
+  //  })
+    // console.log("batas B")
+    // console.log(hasil)
+    // console.log("typeof = " + typeof hasil)
+    // console.log("batas B")
+    // const secret = await generateSecret('ES256')
+    // const { publicKey, privateKey } = await generateKeyPair('RS256')
+    // console.log(publicKey)
+    // console.log(privateKey)
+    // const privateJwk = await exportJWK(privateKey)
+    // const publicJwk = await exportJWK(publicKey)
     //const refreshToken =  jwt.sign(user,refreshPrivateKey,{ algorithm: 'RS256', expiresIn: '5m'})
     //refreshTokens.push(refreshToken) //send refreshToken to refreshTokens Array
-    res.json({ accessToken: hasil}) //return value
+    res.json({ accessToken: accessToken, secret: publicJwk }) //return value
 })
 
 async function generateAccessToken(user){
-    const secret = `MIIBPAIBAAJBALJaeVlgMfxZUWglk0PZZBkbmnkZkFAbqtaTJqeCIXa8xscPVvxJ
-    h2JjhwC4OwsVBgHvrhIwVLodgrQbYRpuVF0CAwEAAQJABIwoAe5g9+UzHSuwGI/H
-    bJh2lNXhBxndfkEcQDMiNUvJ22rVf+v+YsrxMLWkwoss3jERZ7JKNFepbNuir9SG
-    IQIhAP1406f4FoWMDwfjMjf1rkCEfyOzAZ320us8mZBPMFPFAiEAtCHaG14NlC1z
-    mV29jWVh9YoDECcoS2zAvunJRv6IT7kCIQD7Cgw2s9M6eTj5yt8V5VGrvI5fQQ88
-    8BR9vwsojgWDMQIhAKdAo1Yz3yHNjf9CBcVq9CjbS3rNEOHviYv6YNQVdBWpAiEA
-    mlJ9E20+boNRHie/PGmjZyOM9mkjOyLLMqIbGhRe4vM=`
-    var uint8array = new TextEncoder("utf-8").encode(secret); //convert secret to uint8array    
+  const { publicKey, privateKey } = await generateKeyPair('RS256')
+// console.log(publicKey)
+// console.log(privateKey)
+    const privateKeyRaw = await exportJWK(privateKey)
+    const publicKeyRaw = await exportJWK(publicKey)
+    // var uint8array = new TextEncoder("utf-8").encode(secret); //convert secret to uint8array
     const jwt = await new SignJWT({ 'urn:example:claim': true }) // generate token JWT // SignJWT dari library
-  .setProtectedHeader({ alg: 'HS256' })
+  .setProtectedHeader({ alg: 'RS256' })
   .setIssuedAt()
   .setIssuer('urn:example:issuer')
   .setAudience('urn:example:audience')
   .setExpirationTime('2h')
-  .sign(uint8array)
-    return jwt //return sukses //output object     
+  .sign(privateKey)
+
+  let accessToken = jwt, publicJwk = publicKeyRaw;
+  // let accessToken = 'John',
+  // publicJwk = 'Doe';
+
+// return values
+return {
+  accessToken,
+  publicJwk
+};  
 }
 
 // Call start
