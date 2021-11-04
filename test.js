@@ -16,7 +16,6 @@ async function encrypt(publicKey) {
 }
 
 async function decrypt(jwe, privateKey) {
-    console.log("Should be PrivateKeyObject")
     const decoder = new TextDecoder()
     const {
         plaintext,
