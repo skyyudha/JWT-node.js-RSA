@@ -107,43 +107,41 @@ app.delete('/logout',(req,res)=>{
 app.post('/login',async (req,res) => { //diganti jadi post karena mau ngirim token
 //bagian authorization
     const username = req.body.username //gk tau jelasinnya gimana
+    console.log("typeof = " + typeof username)
+    console.log("secret = " + username)
     const user = {name: username}
     
-    // let { accessToken, publicJwk }  =  generateAccessToken(user) //panggil sync fungsi
     let { accessToken, publicJwk }  = await  generateAccessToken(user) //panggil sync fungsi
-    console.log("batas B")
-    console.log(accessToken)
-    console.log(publicJwk)
-    console.log("batas B")
-  //   let hasil = await accessToken.then(function(result) {
-  //     // console.log("batas A")      
-  //     // console.log(result) // "Some User token"
-  //     // console.log("typeof = " + typeof result)
-  //     // console.log("batas A")
-  //     // accessToken = result; // fail
-  //     return result; // fail
-  //  })
     // console.log("batas B")
-    // console.log(hasil)
-    // console.log("typeof = " + typeof hasil)
+    // console.log(accessToken)
+    // console.log(publicJwk)
     // console.log("batas B")
-    // const secret = await generateSecret('ES256')
-    // const { publicKey, privateKey } = await generateKeyPair('RS256')
-    // console.log(publicKey)
-    // console.log(privateKey)
-    // const privateJwk = await exportJWK(privateKey)
-    // const publicJwk = await exportJWK(publicKey)
-    //const refreshToken =  jwt.sign(user,refreshPrivateKey,{ algorithm: 'RS256', expiresIn: '5m'})
-    //refreshTokens.push(refreshToken) //send refreshToken to refreshTokens Array
+
     res.json({ accessToken: accessToken, secret: publicJwk }) //return value
 })
+
+var Rasha = require('rasha');
 
 async function generateAccessToken(user){
   const { publicKey, privateKey } = await generateKeyPair('RS256')
 // console.log(publicKey)
 // console.log(privateKey)
-    const privateKeyRaw = await exportJWK(privateKey)
+    // const privateKeyRaw = await exportJWK(privateKey)
     const publicKeyRaw = await exportJWK(publicKey)
+    const pubPEM = await Rasha.export({ jwk: publicKeyRaw }).then(function (pem) {
+      // PEM in PKCS1 (traditional) format
+      console.log(pem);
+      return pem
+    });    
+    fs.writeFileSync("public11.pem", pubPEM);
+    // console.log("batas B")
+    //     console.log(pubPEM);
+    // console.log("batas B")
+
+    // Rasha.import({ pem: pubPEM }).then(function (jwk) {
+    //   console.log(jwk);
+    // });
+
     // var uint8array = new TextEncoder("utf-8").encode(secret); //convert secret to uint8array
     const jwt = await new SignJWT({ 'urn:example:claim': true }) // generate token JWT // SignJWT dari library
   .setProtectedHeader({ alg: 'RS256' })
@@ -154,17 +152,7 @@ async function generateAccessToken(user){
   .sign(privateKey)
 
   let accessToken = jwt, publicJwk = publicKeyRaw;
-  // let accessToken = 'John',
-  // publicJwk = 'Doe';
-
-// return values
-return {
-  accessToken,
-  publicJwk
-};  
+  return { accessToken, publicJwk};  
 }
-
-// Call start
-
   
 app.listen(4000)
