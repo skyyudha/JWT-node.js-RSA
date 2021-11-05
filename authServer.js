@@ -65,9 +65,9 @@ async function generateAccessToken(user){
       const {
         privateKey,
         publicKey
-    } = await generateKeyPair('PS256');
+    } = await generateKeyPair('RSA-OAEP-256');
 
-    const secret = await generateSecret('A256GCM')
+    // const secret = await generateSecret('A256GCM')
     const payload = {
       "data": "xyz"
   }
@@ -84,14 +84,20 @@ async function generateAccessToken(user){
     });    
 
     // var uint8array = new TextEncoder("utf-8").encode(secret); //convert secret to uint8array
-    const uint8array = new TextEncoder("utf-8").encode(JSON.stringify(payload));
-    const jwe = await new CompactEncrypt(uint8array)
+    // const uint8array = new TextEncoder("utf-8").encode(JSON.stringify(payload));
+    const encoder = new TextEncoder("utf-8")
+    const jwe = await new CompactEncrypt(encoder.encode(JSON.stringify(payload)))
         .setProtectedHeader({
             alg: 'RSA-OAEP-256',
             enc: 'A256GCM'
         })
-        .setContentEncryptionKey(secret)
-        .encrypt(privateKey)
+        /*
+        .setProtectedHeader({
+            alg: 'ECDH-ES+A128KW',
+            enc: 'A128GCM'
+        })
+        */
+        .encrypt(publicKey)
 
   //   const jwt = await new SignJWT({ 'urn:example:claim': true }) // generate token JWT // SignJWT dari library
   // .setProtectedHeader({ alg: 'RS256' })

@@ -12,7 +12,7 @@ var publicKey = fs.readFileSync('./public11.pem', 'utf8'); //ambil key dari file
 
 // var publicKey = fs.readFileSync('./secret.key.pub', 'utf8');
 
-const { jwtVerify, importJWK  } = require('jose')
+const { jwtVerify, importJWK, compactDecrypt  } = require('jose')
 app.use(express.json()) //pasang JWT ke Apps
 
 const posts = [
@@ -39,7 +39,7 @@ async function authenticateToken(req,res,next){
     });     
     // console.log("batas A"); console.log(publicKeyRaw);  console.log("type= "+typeof(publicKeyRaw));  console.log("batas A/"); //test print 
 
-    const RSAPublicKey = await importJWK(publicKeyRaw, 'RS256') //import jwk to objectKey    
+    const RSAPublicKey = await importJWK(publicKeyRaw, 'RSA-OAEP-256') //import jwk to objectKey    
     // console.log("batas C"); console.log(RSAPublicKey); console.log("type= "+typeof(publicRSAPublicKeyKeyRaw)); console.log("batas C/"); //test print 
  
     const authHeader = req.headers['authorization'] //ambil html header authorization
@@ -49,13 +49,14 @@ async function authenticateToken(req,res,next){
 
     if (token == null) return res.sendStatus(401) //jika user tidak memiliki token maka akan return user dan status 401 untuk tidak memilki akses
     //verifikasi token
-    const { payload, protectedHeader } = await jwtVerify(token, RSAPublicKey, {
-        issuer: 'urn:example:issuer',
-        audience: 'urn:example:audience'
-      })
+    const decoder = new TextDecoder()
+    const {
+        plaintext,
+        protectedHeader
+    } = await compactDecrypt(token, RSAPublicKey)
 
       console.log(protectedHeader)
-      console.log(payload)
+      console.log(plaintext)
 }
 
 app.listen(3000)
