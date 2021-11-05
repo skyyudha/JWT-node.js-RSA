@@ -10,6 +10,12 @@ async function encrypt(publicKey) {
             alg: 'RSA-OAEP-256',
             enc: 'A256GCM'
         })
+        /*
+        .setProtectedHeader({
+            alg: 'ECDH-ES+A128KW',
+            enc: 'A128GCM'
+        })
+        */
         .encrypt(publicKey)
 
     return jwe
@@ -31,7 +37,14 @@ async function main() {
         privateKey,
         publicKey
     } = await jose.generateKeyPair('RSA-OAEP-256')
-
+    
+    /*
+    const {
+        privateKey,
+        publicKey
+    } = await jose.generateKeyPair('ECDH-ES')
+    */
+    
     const jwe = await encrypt(publicKey)
     const content = await decrypt(jwe, privateKey)
 
