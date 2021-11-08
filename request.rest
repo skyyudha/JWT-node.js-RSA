@@ -1,6 +1,12 @@
-GET http://localhost:3000/posts 
-Authorization: Bearer eyJhbGciOiJFQ0RILUVTK0ExMjhLVyIsImVuYyI6IkEyNTZHQ00iLCJlcGsiOnsieCI6ImkyX3ZMSjZ3SzVKaDh0d1JSUW9FdzFaRGxsaFluWnQ3R3NUQWdNVE9YbXMiLCJ5IjoiMFdFQWVTSXJEcGdDWUlIVTVpRG9nQ0EwYWc2S2tfS2dUMGR3UGJ0djVUdyIsImNydiI6IlAtMjU2Iiwia3R5IjoiRUMifX0.iORYTkS45zwa_Tb2uYrHxjVMJZojitbQxKM7BpP6XGK-qWXDU_Mt0A.tqJ2oy7QDA2B4tPE.9u9CssAzsFOLbwg7f2Y.ArFpClJXVi-YsTkHxAko8g
+#Alur:
+# getKey -> login -> ambil token dari http header -> taro token ke Authorization Header di Apps posts -> posts
 
+###
+POST http://localhost:3000/getKey
+
+###
+GET http://localhost:3000/posts 
+Authorization: Bearer eyJhbGciOiJFQ0RILUVTK0ExMjhLVyIsImVuYyI6IkEyNTZHQ00iLCJlcGsiOnsieCI6Inp5bVpiWGMybmstZmtfZHBSRXN5S0JtUXM3YWRXeWw1VmFvVE4tMllFZzAiLCJ5IjoiUXJNSEU0NTFqakFTNklCeS12a3h1RVpmZURLekl4RXZpdVlVZTROQkEwWSIsImNydiI6IlAtMjU2Iiwia3R5IjoiRUMifX0.q5xv87tbz7mACzTbNUDD6TRIP6UbfrGp-JOGapnXmNfBVh2pkhOqCQ.eYSWm4bYu_Qz4chn.uGNfo8VIi7o1BzbtPcY.UV3M9uQ8bedOEzOKpVICVg
 
 # Content-Type: application/json
 # {
@@ -14,6 +20,7 @@ Content-Type: application/json
 {
     "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibGFsYSIsImlhdCI6MTYzMjg5Mzg5MSwiZXhwIjoxNjMyODk0MTkxfQ.eBdP5VG6RzZT1fzBm3NcYJiUomVol40UKhiddUjpuxjLOfl6xcNHS9XJ2Ni4sHpXKQjzSXY7HgwEsoBmPNF2-OVm7mLGn8VAddOCxkkDL7DwRrIfQX5q1TU7NYObQXow0MtlWgD8bDcxwp2nWd8cxlkKs3V5sNgCTsFi97lyVKFrwYav_z6otpF3hn9VAb0d5KR4nDK8Aszj1wW2kGXVQ6NAsVakYO30SV-DOE3kZMvjrgvek0vv0gZMjCi_5QcdWb5vgKxZ1aidkHCT6W6_CJv-K5_F9wlTIAsONNTT_XgApkP5m97XV7mYxPW0m7N2YJHksWb04DccHvGtCOS6NA"
 }
+
 ###
 POST http://localhost:4000/token 
 #ada masalah dalam generate access token baru menggunakan refresh token.
