@@ -100,14 +100,14 @@ async function generateAccessToken(user){
     // var uint8array = new TextEncoder("utf-8").encode(secret); //convert secret to uint8array
     // const uint8array = new TextEncoder("utf-8").encode(JSON.stringify(payload));
     const payload = { //data yang ingin dikirim
-      "data": "xyz"
+      "data": "Hallo mas josep, apa kabar ?"
   }
 
     const encoder = new TextEncoder("utf-8")
     // const jwe =  await new CompactEncrypt(encoder.encode(JSON.stringify(payload)))
     return await new CompactEncrypt(encoder.encode(JSON.stringify(payload)))
         .setProtectedHeader({
-            alg: 'ECDH-ES+A128KW',
+            alg: 'ECDH-ES+A256KW',
             // alg: 'RSA-OAEP-256',
             enc: 'A256GCM'
         })//deklarasi algorima2 yang digunakan
