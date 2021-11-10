@@ -16,7 +16,7 @@ var privateKeyRaw = fs.readFileSync('./private11.pem', 'utf8'); //ambil key dari
 // var publicKey = fs.readFileSync('./secret.key.pub', 'utf8');
 
 const { jwtVerify, importJWK, compactDecrypt,importPKCS8,
-    generateKeyPair,   exportPKCS8, exportSPKI, importSPKI  } = require('jose')
+    generateKeyPair,   exportPKCS8, exportSPKI, importSPKI, exportJWK  } = require('jose')
 app.use(express.json()) //pasang JWT ke Apps
 
 const posts = [
@@ -46,11 +46,13 @@ app.post('/getKey', async (req,res) => { //generate key pair + export public, pr
 
     //export Object key jadi PEM (PKCS8 format)
     const privateKeyRaw = await exportPKCS8(privateKey);
+    console.log(await exportJWK(privateKey));
     console.log(privateKeyRaw);
     fs.writeFileSync("private11.pem", privateKeyRaw); //export file pem
 
     //export Object key jadi PEM (SPKI format)
     const publicKeyRaw = await exportSPKI(publicKey);
+    console.log(await exportJWK(publicKey));
     console.log(publicKeyRaw);
     fs.writeFileSync("public11.pem", publicKeyRaw); //export file pem
 
@@ -73,12 +75,15 @@ async function authenticateToken(req,res,next){
     const {
         plaintext,
         protectedHeader
+        // , iv, ciphertext, tag //tidak dikeluarkan default di lib-nya. //alasan keamanan
     } = await compactDecrypt(token, secretKey)
-    const content = decoder.decode(plaintext)
+    // const content = 
 
     console.log(protectedHeader)
-    console.log(plaintext)
-    console.log(content)
+    // console.log(decoder.decode(iv))
+    // console.log(decoder.decode(ciphertext))
+    // console.log(plaintext)
+    console.log(decoder.decode(plaintext))
 }
 
 app.listen(3000)
