@@ -6,6 +6,7 @@
   "scripts": {
     "devStart": "nodemon server1.js",
     "devStartAuth": "nodemon server2.js",
+    "AuthServer": "nodemon Authserver.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

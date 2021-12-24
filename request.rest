@@ -6,7 +6,7 @@ POST http://localhost:3000/getKey
 
 ###
 GET http://localhost:3000/posts 
-Authorization: Bearer eyJhbGciOiJFQ0RILUVTK0EyNTZLVyIsImVuYyI6IkEyNTZHQ00iLCJlcGsiOnsieCI6IjlaRWp4YnR3aUlwNEJCS0tLRU0wNUREUWE0U3hfb21oQng2NE9NeVpXU1kiLCJ5IjoiamlTMWFqaGd4emVfQm1URGtlOGZCWnRwQ0Q2OFBxZHlsZG10R3RURFhTQSIsImNydiI6IlAtMjU2Iiwia3R5IjoiRUMifX0.q3y19qfkQ5Yl2ED7oLPqajA5kUD5wubV9JZfMBsQR1-8vnjdCCDWAw._iKV2Bq72WG9o_L8.9JkWuyeP1o9eOZ67Q3iqzJJsS7zCthcDySOCZg_sDkYZV4zeRg6z.esZJgQDmCquC4B9h-xVvvw
+Authorization: Bearer eyJhbGciOiJFQ0RILUVTK0EyNTZLVyIsImVuYyI6IkEyNTZHQ00iLCJlcGsiOnsieCI6IklEM1lxVlZKSmVrZ0N4eFVGODN6UjlmNXRBWm9SdFZ5ZEZyOWthV0U2b1kiLCJ5IjoicDdQWWtKaVhNbUY1YVIxVHJ1XzVkM2hiZFJGRlBUWVUxeDlTazFuRS13USIsImNydiI6IlAtMjU2Iiwia3R5IjoiRUMifX0.lbXaAHHyX0fksUZYnl4vGdfAFR3XsDXAq0O7APTrSRgxnbYAyqzA.zxVcuo6qX5csphKW.FGNG4pvYxo4SX5wi8M4xDslh30e4l85fbn2e59iEg1IgWn0qjuIL.G6XJjjLgaMXX8s40mpdTiw
 
 # Content-Type: application/json
 # {
@@ -37,7 +37,7 @@ POST  http://localhost:4000/login
 Content-Type: application/json
 
 {
-    "username": "lala"
+    "username": "lele"
 }
 
 ###
