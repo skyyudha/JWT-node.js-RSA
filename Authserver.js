@@ -57,7 +57,7 @@ app.post('/getKey', async (req,res) => { //generate key pair + export public, pr
     fs.writeFileSync("public11.pem", publicKeyRaw); //export file pem
 
     // res.sendStatus(200)
-    res.json({ status: "Generate Key Pair Sukses Bro"})
+    res.json({ status: "Generate Key Pair Sukses"})
 })
 
 async function authenticateToken(req,res,next){
@@ -86,4 +86,4 @@ async function authenticateToken(req,res,next){
     console.log(decoder.decode(plaintext))
 }
 
-app.listen(3000)
+app.listen(5000)
